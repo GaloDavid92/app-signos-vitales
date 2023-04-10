@@ -50,8 +50,7 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i>&nbsp;{{auth()->user()->name}}</a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Mi Perfil</a></li>
-                    <li><a class="dropdown-item" href="#!">Agregar Usuario</a></li>
+                    <li><a class="dropdown-item" href="/usuarios">Usuarios</a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
