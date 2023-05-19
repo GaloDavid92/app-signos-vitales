@@ -26,16 +26,18 @@
             </div>
         @endif
 
-        <div class="d-flex flex-row-reverse mb-4">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newUsuario">
-                Nuevo&nbsp;<i class="fa-solid fa-person-circle-plus"></i>
-            </button>
-        </div>
+        @if ( auth()->user()->role == 'ADMIN' )
+            <div class="d-flex flex-row-reverse mb-4">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newUsuario">
+                    Nuevo&nbsp;<i class="fa-solid fa-person-circle-plus"></i>
+                </button>
+            </div>
+        @endif
         <!-- Button trigger modal -->
 
         <!-- Modal -->
         <div class="modal fade" id="newUsuario" tabindex="-1" aria-labelledby="newUsuarioLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="newUsuarioLabel">Agregar Usuario</h1>
@@ -45,24 +47,32 @@
                         @csrf
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="name" class="form-label mt-2">Nombre</label>
                                     <input type="text" class="form-control" name="name" placeholder="Nombre" required>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="email" class="form-label mt-2">Correo</label>
                                     <input type="email" class="form-control" name="email" placeholder="Correo"
                                         required>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <label for="rolw" class="form-label mt-2">Rol</label>
+                                    <select class="form-control" name="role">
+                                        <option value="ADMIN">Administrador</option>
+                                        <option value="USER">Usuario</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12">
                                     <label for="password" class="form-label mt-2">Contraseña</label>
                                     <input type="password" class="form-control" name="password"
                                         placeholder="Contraseña" required>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="password" class="form-label mt-2">Confirmar</label>
                                     <input type="password" class="form-control" name="password_confirm"
                                         placeholder="Contraseña" required>
@@ -81,18 +91,23 @@
             <thead>
                 <th>Nombre</th>
                 <th>Correo</th>
+                <th>Rol</th>
             </thead>
             <tbody>
                 @foreach ($usuarios as $p)
                     <tr>
                         <td>{{ $p->name }}</td>
                         <td>{{ $p->email }}</td>
-                        <td>
-                            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-toggle="tooltip"
-                                data-placement="top" title="Editar" data-bs-target="#{{ 'newUsuario' . $p->id }}">
-                                <i class="fa-solid fa-pencil"></i>
-                            </button>
-                        </td>
+                        <td>{{ $p->role }}</td>
+                        
+                        @if ( auth()->user()->role == 'ADMIN' )
+                            <td>
+                                <button type="button" class="btn btn-link" data-bs-toggle="modal" data-toggle="tooltip"
+                                    data-placement="top" title="Editar" data-bs-target="#{{ 'newUsuario' . $p->id }}">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </button>
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
@@ -100,7 +115,7 @@
         @foreach ($usuarios as $p)
             <div class="modal fade" id="{{ 'newUsuario' . $p->id }}" tabindex="-1"
                 aria-labelledby="{{ 'newUsuarioLabel' . $p->id }}" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="{{ 'newUsuarioLabel' . $p->id }}">Editar Usuario
@@ -113,30 +128,37 @@
                             @csrf
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <label for="nombre" class="form-label mt-2">Nombre</label>
                                         <input type="text" class="form-control" name="name" placeholder="Nombre"
                                             required value="{{ $p->name }}">
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <label for="email" class="form-label mt-2">Correo</label>
                                         <input type="email" class="form-control" name="email"
                                             placeholder="Correo" required value="{{ $p->email }}">
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <label for="rolw" class="form-label mt-2">Rol</label>
+                                        <select class="form-control" name="role" title="role">
+                                            <option value="ADMIN" {{ $p->role == 'ADMIN'? 'selected': ''}}>Administrador</option>
+                                            <option value="USER" {{ $p->role == 'USER'? 'selected': ''}}>Usuario</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-12">
                                         <label for="password" class="form-label mt-2">Contraseña</label>
                                         <input type="password" class="form-control" name="password"
                                             placeholder="Contraseña" required>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <label for="password" class="form-label mt-2">Confirmar</label>
                                         <input type="password" class="form-control" name="password_confirm"
                                             placeholder="Contraseña" required>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="modal-footer">

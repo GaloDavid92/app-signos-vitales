@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="container border p-4 mt-4">
-        <h2><i class="fa-solid fa-people-group"></i>&nbsp;Personas</h2>
+        <h2><i class="fa-solid fa-people-group"></i>&nbsp;Adultos Mayores</h2>
 
 
         @error('title')
@@ -109,7 +109,8 @@
             <tbody>
                 @foreach ($personas as $p)
                     <tr>
-                        <td>{{ $p->nombre . ' ' . $p->apellido }}</td>
+                        <td>{{ $p->nombre }}</td>
+                        <td>{{ $p->apellido }}</td>
                         <td>{{ $p->identificacion }}</td>
                         <td>{{ $p->fecha_nacimiento }}</td>
                         <td>

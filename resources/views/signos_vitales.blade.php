@@ -18,7 +18,7 @@
     </div>
     <div class="container border p-4 mt-4">
         <h2>Signos Vitales</h2>
-        <h4>{{ $persona->nombre . ' ' . $persona->apellido }}</h4>
+        <h3>{{ $persona->nombre . ' ' . $persona->apellido }}</h3>
 
         <div class="card">
             <div class="card-body">
@@ -60,40 +60,43 @@
                 </div>
             </div>
         </div>
+        <br>        
         <br>
-        <div class="container-fluid">
-            <form action="{{ route('signos-save') }}" method="post">
-                @csrf
-                <input type="number" name="id_persona" style="display: none;" value="{{ $persona->id }}">
-                <table class="table">
-                    <thead>
-                        <th>Frec cardiaca</th>
-                        <th>Frec respiratoria</th>
-                        <th>Presion arterial</th>
-                        <th>Temperatura</th>
-                        <th>Acciones</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="number" name="frecuencia_cardiaca" id="" class="form-control"
-                                    required></td>
-                            <td><input type="number" name="frecuencia_respiratoria" id="" class="form-control"
-                                    required></td>
-                            <td>
-                                <input type="text" name="presion" id="" class="form-control" required>
-                            </td>
-                            <td><input type="number" name="temperatura" id="" class="form-control" required
-                                    step="0.01" /></td>
-                            <td>
-                                <button type="submit" id="" class="btn btn-success btn-sm">
-                                    <i class="fa-solid fa-floppy-disk"></i>&nbsp;Guardar
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
+        @if (auth()->user()->role == 'USER')
+            <div class="container-fluid">
+                <form action="{{ route('signos-save') }}" method="post">
+                    @csrf
+                    <input type="number" name="id_persona" style="display: none;" value="{{ $persona->id }}">
+                    <table class="table">
+                        <thead>
+                            <th>Frec cardiaca</th>
+                            <th>Frec respiratoria</th>
+                            <th>Presion arterial</th>
+                            <th>Temperatura</th>
+                            <th>Acciones</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="number" name="frecuencia_cardiaca" id="" class="form-control"
+                                        required></td>
+                                <td><input type="number" name="frecuencia_respiratoria" id="" class="form-control"
+                                        required></td>
+                                <td>
+                                    <input type="text" name="presion" id="" class="form-control" required>
+                                </td>
+                                <td><input type="number" name="temperatura" id="" class="form-control" required
+                                        step="0.01" /></td>
+                                <td>
+                                    <button type="submit" id="" class="btn btn-success btn-sm">
+                                        <i class="fa-solid fa-floppy-disk"></i>&nbsp;Guardar
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        @endif
     </div>
     <div class="container border p-4 mt-4 table-responsive">
         <table class="table table-striped data-table">
@@ -133,19 +136,25 @@
                         @if ($sv->temperatura >= 36 && $sv->temperatura <= 37.2)
                             <td>{{ $sv->temperatura }}</td>
                         @else
-                            <td class="text-danger"><strong>{{ $sv->frecuencia_respiratoria }}</strong></td>
+                            <td class="text-danger"><strong>{{ $sv->temperatura }}</strong></td>
                         @endif
                         <td>{{ $sv->updated_at }}</td>
                         <td>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-toggle="modal"
-                                data-placement="top" title="Eliminar" data-bs-target="#{{ 'deleteSV' . $sv->id }}">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
+                            @if (auth()->user()->role == 'USER')
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-toggle="modal"
+                                    data-placement="top" title="Eliminar" data-bs-target="#{{ 'deleteSV' . $sv->id }}">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+    </div>
+    <div class="container">
+        
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
     </div>
 
     @foreach ($persona->signosVitales as $sv)
@@ -167,4 +176,66 @@
             </div>
         </div>
     @endforeach
+    <script>
+        window.onload = function() {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                axisY: {
+                    title: "Signos Vitales"
+                },
+                legend: {
+                    cursor: "pointer",
+                    dockInsidePlotArea: true,
+                    itemclick: toggleDataSeries
+                },
+                data: [{
+                        type: "spline",
+                        name: "Frecuencia Cardiaca",
+                        toolTipContent: "Frecuencia Cardiaca: {y}",
+                        showInLegend: true,
+                        dataPoints: <?php echo json_encode($datos['fc']); ?>
+                    },
+                    {
+                        type: "spline",
+                        name: "Frecuencia Respiratorias",
+                        toolTipContent: "Frecuencia Respiratorias: {y}",
+                        showInLegend: true,
+                        dataPoints: <?php echo json_encode($datos['fr']); ?>
+                    },
+                    {
+                        type: "spline",
+                        name: "Presion Sistólica",
+                        toolTipContent: "Presion Sistólica: {y}",
+                        showInLegend: true,
+                        dataPoints: <?php echo json_encode($datos['ps']); ?>
+                    },
+                    {
+                        type: "spline",
+                        name: "Presion Diastolica",
+                        toolTipContent: "Presion Diastolica: {y}",
+                        showInLegend: true,
+                        dataPoints: <?php echo json_encode($datos['pd']); ?>
+                    },
+                    {
+                        type: "spline",
+                        name: "Temperatura",
+                        toolTipContent: "Temperatura: {y} °C",
+                        showInLegend: true,
+                        dataPoints: <?php echo json_encode($datos['tm']); ?>
+                    },
+                ]
+            });
+            chart.render();
+
+            function toggleDataSeries(e) {
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                } else {
+                    e.dataSeries.visible = true;
+                }
+                chart.render();
+            }
+        }
+    </script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 @endsection

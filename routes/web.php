@@ -32,8 +32,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/personas', [PersonasController::class, 'index'])->name('personas')->middleware('auth');
 Route::post('/persona-save', [PersonasController::class, 'store'])->name('persona-save')->middleware('auth');
+Route::post('/persona-search', [PersonasController::class, 'search'])->name('persona-search')->middleware('auth');
 Route::patch('/persona-update/{id}', [PersonasController::class, 'update'])->name('persona-update')->middleware('auth');
 Route::get('/signos_vitales/{id_persona}', [PersonasController::class, 'show'])->name('signos_vitales')->middleware('auth');
+
 
 Route::delete('/signos_vitales/{id}', [SignosVitalesController::class, 'destroy'])->name('signos_vitales')->middleware('auth');
 Route::post('/signos-save', [SignosVitalesController::class, 'store'])->name('signos-save')->middleware('auth');

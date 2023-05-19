@@ -14,7 +14,7 @@ class SignosVitalesController extends Controller
      */
     public function index()
     {
-        //
+        $personas = Persona::all();
     }
 
     /**
@@ -33,7 +33,6 @@ class SignosVitalesController extends Controller
         $request->validate([
             'presion' => 'required|regex:/(^\d+(\/\d+)*$)/u'
         ]);
-
         $sv = new SignosVitales();
         $sv->id_persona = $request->id_persona;
         $sv->frecuencia_cardiaca = $request->frecuencia_cardiaca;
