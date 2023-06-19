@@ -33,6 +33,8 @@
 <body>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
+        <img src="{{ asset('logo.png') }}" alt="Descripción de la imagen"  height="60">
+
         <a class="navbar-brand ps-3" href="/personas">Centro Gerontológico Atalaya</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i

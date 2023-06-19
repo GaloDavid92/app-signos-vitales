@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer("presion_diastolica");
             $table->decimal('temperatura', $precision = 8, $scale = 2);
             $table->foreignId('id_persona')->constrained('personas')->cascadeOnUpdate();
+            $table->foreignId('id_usuario')->constrained('users')->cascadeOnUpdate();
             $table->timestamps();
         });
     }

@@ -106,6 +106,7 @@
                 <th>Presion Arterial</th>
                 <th>Temperatura</th>
                 <th>Fecha</th>
+                <th>Registrado por:</th>
                 <th>Acciones</th>
             </thead>
             <tbody>
@@ -139,6 +140,7 @@
                             <td class="text-danger"><strong>{{ $sv->temperatura }}</strong></td>
                         @endif
                         <td>{{ $sv->updated_at }}</td>
+                        <td>{{ $sv->usuario->name }}</td>
                         <td>
                             @if (auth()->user()->role == 'USER')
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-toggle="modal"

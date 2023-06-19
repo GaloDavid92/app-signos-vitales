@@ -12,4 +12,7 @@ class SignosVitales extends Model
     public function persona(){
         return $this->belongsTo(Persona::class, 'id_persona', 'id');
     }
+    public function usuario(){
+        return $this->belongsTo(User::class, 'id_usuario', 'id');
+    }
 }

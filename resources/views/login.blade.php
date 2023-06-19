@@ -40,6 +40,10 @@
         @endif
         <div class="mb-3">
             <h2>Login</h2>
+            <div class="text-center">
+                <img src="{{ asset('logo.png') }}" alt="Descripción de la imagen" width="100%">
+            </div>
+
             <label for="email" class="form-label">Correo</label>
             <input type="email" value="{{ old('email') }}" class="form-control" name="email" required>
             @error('email')<h6 class="alert alert-danger">{{ $message }}</h6>@enderror
@@ -67,7 +71,28 @@
 
     <script>
         $(document).ready(function() {
-            $('.data-table').DataTable();
+            $('.data-table').DataTable({
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
         });
     </script>
 </body>

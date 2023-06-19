@@ -40,6 +40,7 @@ class SignosVitalesController extends Controller
         $sv->presion_sistolica = explode("/",$request->presion)[0];
         $sv->presion_diastolica = explode("/",$request->presion)[1];
         $sv->temperatura = $request->temperatura;
+        $sv->id_usuario = auth()->user()->id;
         $sv->save();
         return redirect()->route('signos_vitales', $request->id_persona)->with('success', 'Registro guardado');
     }
