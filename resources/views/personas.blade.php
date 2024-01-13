@@ -61,6 +61,10 @@
                                 data-placement="top" title="Editar" data-bs-target="#{{ 'newPersona' . $p->id }}">
                                 <i class="fa-solid fa-pencil"></i>
                             </button>
+                            <button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="top" 
+                                title="Generar PDF" onclick="{{ 'generatePDF(' . $p->id . ')' }}">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </button>
                             <a class="btn btn-dark btn-sm" href="{{ route('signos_vitales', ['id' => $p->id]) }}">Signos
                                 Viales</a>
                         </td>
@@ -308,10 +312,10 @@
         <div class="modal fade" id="{{ 'newPersona' . $p->id }}" tabindex="-1"
             aria-labelledby="{{ 'newPersonaLabel' . $p->id }}" aria-hidden="true">
             <div class="modal-dialog modal-lg">
-                <div class="modal-content">
+                <div class="modal-content" id="{{ 'print' . $p->id }}">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="{{ 'newPersonaLabel' . $p->id }}">Editar Persona
-                            {{ $p->nombre }}</h1>
+                        <h1 class="modal-title fs-5" id="{{ 'newPersonaLabel' . $p->id }}">Ficha de 
+                            {{ $p->nombre .' '. $p->apellido}}</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="{{ route('persona-update', ['id' => $p->id]) }}" method="post">
@@ -693,6 +697,8 @@
         </div>
     @endforeach
 
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         function addRows(num, tabla) {
             var rowCount = document.getElementById(num).value;
@@ -726,6 +732,24 @@
 
                 tbody.appendChild(newRow);
             }
+        }
+    </script>
+    <script>
+        function generatePDF(id) {
+            var content = document.getElementById('print' + id).innerHTML;
+            var printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>Impresión</title>');
+            
+            printWindow.document.write('<style>@media print {.btn {display: none;}}</style>');
+            // Opcional: Agregar aquí tus estilos para la impresión
+            printWindow.document.write('<style>body { font-family: Arial; }</style>');
+
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(content);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+
         }
     </script>
 @endsection
